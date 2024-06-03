@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Theme</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<style>
+body {
+    background-image: url(brown1.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+}
+.thumbnail {
+    border: 2px solid #DCC60D;
+    padding: 10px;
+}
+.row {
+    padding: 50px;
+}
+</style>
+<body>
+    <div class="container mt-3">
+        <h1 class="text-center text-white"><u>Select a New Theme</u></h1>
+        <p class="text-center text-white">Here are 3 additional themes which you can add</hp>
+        <div class="row">
+            <div class="col-md-4">
+              <div class="thumbnail">
+                  <img src="theme1.png" style="width:100%">
+                  <div class="text-center mt-3">
+                    <button class="btn btn-warning theme-btn" data-theme="blueberry">Blueberry</button>
+                  </div>
+                </a>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="thumbnail">
+                  <img src="theme2.png" style="width:100%">
+                  <div class="text-center mt-3">
+                    <button class="btn btn-warning theme-btn" data-theme="blackberry">Blackberry</button>
+                  </div>
+                </a>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="thumbnail">
+                  <img src="theme3.png" style="width:100%">
+                  <div class="text-center mt-3">
+                    <button class="btn btn-warning theme-btn" data-theme="whitechocolate">White Chocolate</button>
+                  </div>
+                </a>
+              </div>
+            </div>
+         </div>   
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const themeButtons = document.querySelectorAll('.theme-btn');
+            themeButtons.forEach(function(button) {
+                button.addEventListener('click', function() {
+                    const theme = this.getAttribute('data-theme');
+                    sessionStorage.setItem('selectedTheme', theme); // Store theme in sessionStorage
+                    window.location.href = 'home.html'; // Redirect back to home page
+                });
+            });
+        });
+    </script>
+</body>
+</html>

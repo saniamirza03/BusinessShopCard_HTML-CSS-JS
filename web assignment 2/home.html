@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Home Page</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+	<style>
+		body {
+			background-image: url(brown1.jpg);
+			background-repeat: no-repeat;
+			background-size: cover;
+    		background-attachment: fixed;
+		}	
+		.h1 {
+			font-family: rubik;
+			text-decoration: underline;
+			color: white;
+		}	
+		.p {
+			font-family: rubik;
+			max-width: 600px;
+			margin: 0 auto;
+			color: white;
+		}
+		hr {
+			width: 100%;
+		}
+		.profile-pic {
+			max-width: 140px;
+			height: 140px;
+			float: right;
+			border-radius: 50%;
+			object-fit: cover;
+			cursor: pointer;
+		}
+		.profile-pic:hover {
+			border: 2px solid black;
+		}
+		.card {
+			background-image: url(yellow.jpg);
+			background-size: cover;
+			background-repeat: no-repeat;
+			border: none;
+		}
+		.card:hover {
+			box-shadow: 2px 0 15px 2px #CDB661;
+			transition: 0.2s;
+		}
+		.update-btn {
+			background-color:#4A281B; 
+			color: white;
+		}
+		.update-btn:hover {
+			background-color: #351A10;
+			color: white;
+		}
+		.search {
+			float: right;
+			width: 180px;
+		}
+		#search {
+			padding-left: 40px;
+			height: 30px;
+			border: 2px solid black;
+		}
+		.glass {
+			margin-top: -58px;
+			margin-left: 5px;
+		}
+		#th {
+			float: left;
+			border-radius: 5px;
+			width: 180px;
+			height: 30px;
+			border: 2px solid black;
+		}
+		
+		.theme-coffee {
+			background-color: #7E5050;
+			color: white;
+		}
+
+		.theme-strawberry {
+			background-color: #BF124E;
+			color: white;
+		}
+
+		.theme-mango {
+			background-color: #EEE36B; 
+			color: black;
+		}
+
+		.theme-plum {
+			background-color: #6C037F; 
+			color: white;
+		}
+
+		.theme-guava {
+			background-color: #70F287; 
+			color: black;
+		}
+		@media only screen and (max-width: 1200px) {
+			.profile-pic {
+				max-width: 100px;
+				height: 100px;
+			}
+		}
+		@media only screen and (max-width: 780px) {
+			.search {
+				width: 100%;
+				margin-top: 10px;
+			}
+			#th {
+				max-width: 150px;
+				width: 100%;
+				float: none;
+				margin: 0 auto;
+				display: block;
+			}
+		}
+		@media only screen and (max-width: 768px) {
+			.profile-pic {
+				max-width: 140px;
+				height: 140px;
+			}
+		}
+		@media only screen and (max-width: 450px) {
+			#th {
+				max-width: 150px;
+				width: 100%;
+				float: none;
+				margin: 0 auto;
+				display: block;
+			}
+		}
+	</style>
+	<body>
+		<div class = "container-fluid mt-3">
+			<div class = "theme">
+				<!--<label class = "choosetheme">Choose a Theme:</label>-->
+				<select id = "th" class = "form-select-xs">
+					<option value = "theme">Theme</option>
+					<option value = "coffee" class = "theme-coffee">Coffee</option>
+					<option value = "strawberry" class = "theme-strawberry">Strawberry</option>
+					<option value = "mango" class = "theme-mango">Mango</option>
+					<option value = "plum" class = "theme-plum">Plum</option>
+					<option value = "guava" class = "theme-guava">Guava</option>
+
+					<option value="blackberry" class="theme-new" style="display: none;">Blackberry</option>
+					<option value="blueberry" class="theme-new" style="display: none;">Blueberry</option>
+					<option value="whitechocolate" class="theme-new" style="display: none;">White Chocolate</option>
+					<option value = "addnew" class = "theme-new">+ Add New</option>
+				</select>
+			</div>
+			<div class = "search">
+				<input type = "text" class = "form-control" id = "search" placeholder="Search for cards...">
+				<img class = "glass" src = "glass.png" width="25" height="25">
+			</div>
+		</div>	
+		<div class = "container mt-3">
+			<h1 class = "h1 text-center">Business and Shop Cards</h1>
+			
+			<p class = "p text-center pt-3">Below shows the cards of people who are either part of a company or are shop owners.
+			If you want to add a card, click on the "Add" button and if you want to delete or update your card, click on the "Delete"
+			and "Update" button shown on the card.</p>
+			<div class = "d-flex justify-content-center pt-3">
+				<button type = "button" class = "btn btn-warning m-2" onclick = "window.location.href='add.html';">Add Yours</button>
+				<button type = "button" class = "btn btn-danger m-2" onclick = deleteAll()>Delete All</button>
+			</div>
+
+			<hr></hr>
+				<div class = "row" id="cardID">
+					
+				</div>
+		</div>
+	</body>
+
+	<script>
+
+document.addEventListener('DOMContentLoaded', function() {
+	function createCardHTML(card, index, theme) {
+		let cardBackgroundColor, textColor;
+
+		var cardhtml = `
+			<div class = "col-md-4 mb-5">
+				<div class="card">
+				<div class="card" style="background-color: ${cardBackgroundColor}; color: ${textColor};">
+	
+					<div class="card-body">    
+						<div class="profile-pic-container">
+							${card.pic ? `<img class="profile-pic" title = "Right click to open" src="${card.pic}">` : ''}
+						</div>
+						<h4 class="card-title"><u>${card.fn} ${card.ln}</u></h4>
+						<h6 class="card-text"><u>${card.cardtype}</u></h6>
+						<p class="card-text"><b>Name of Business:</b> ${card.bn}</p>
+						<p class="card-text"><b>About:</b> ${card.d}</p>
+						<p class="card-text"><b>Event:</b> ${card.ename}</p>
+						<p class="card-text"><b>Nearest Place:</b> ${card.pname}</p>
+						<p class="card-text"><b>Date:</b> ${card.sdate} - ${card.edate}</p>
+						<p class="card-text"><b>Starting at:</b> ${card.stime}</p>
+						<div class="card-footer d-flex justify-content-between">
+							<button type="button" class="update-btn btn" onclick="updateCard(${index})">Update</button>
+							<button type="button" class="btn btn-danger" onclick="deleteCard(${index})">Delete</button>
+						</div>    
+					</div>
+				</div>
+				</div>
+			</div>	
+			`;
+			return cardhtml;
+	}
+
+    const themeSelect = document.getElementById('th');
+	const btnAdd = document.querySelector('.btn.btn-warning.m-2');
+	const heading = document.querySelector('.h1.text-center');
+	const intro = document.querySelector('.p.text-center.pt-3');
+	let selectTheme = localStorage.getItem('selectTheme');
+	const selectedTheme = sessionStorage.getItem('selectedTheme');
+
+
+	
+	themeSelect.addEventListener('change', function() {
+		const selectedTheme = themeSelect.value;
+
+		// Check if "Add New" option is selected
+		if (selectedTheme === 'addnew') {
+			// Redirect to addtheme.html
+			window.location.href = 'addtheme.html';
+		}
+	});
+
+
+
+
+	if (!selectTheme) {
+        selectTheme = 'coffee';
+    }
+    applyTheme(selectTheme);
+    themeSelect.value = selectTheme;
+
+    themeSelect.addEventListener('change', function() {
+        selectTheme = themeSelect.value;
+		localStorage.setItem('selectTheme', selectTheme);
+        applyTheme(selectTheme);
+    });
+    function applyTheme(theme) {
+
+		if (selectedTheme === 'blueberry') {
+				document.body.style.backgroundImage = 'url("blueberry.jpg")';
+				btnAdd.style.backgroundColor = '#53AEFD'; 
+				btnAdd.style.color = 'white';
+				btnAdd.style.border = 'none';
+				btnAdd.addEventListener('mouseenter', function() {
+					btnAdd.style.backgroundColor = '#287EC8'; 
+				});
+				btnAdd.addEventListener('mouseleave', function() {
+					btnAdd.style.backgroundColor = '#53AEFD'; 
+				});
+				document.querySelectorAll('.card').forEach(function(card) {
+					card.style.backgroundImage = 'url("blueberrycard.png")';
+					card.style.color = 'black';
+					card.addEventListener('mouseenter', function() {
+						card.style.boxShadow = '2px 0 15px 2px #0A528F';
+					});
+					card.addEventListener('mouseleave', function() {
+						card.style.boxShadow = 'none';
+					});
+				});	
+				document.querySelectorAll('.update-btn').forEach(function(card) {
+					card.style.backgroundColor = '#0A528F';
+					card.style.color = 'white';
+					card.addEventListener('mouseenter', function() {
+						card.style.backgroundColor = '#063863'; 
+					});
+					card.addEventListener('mouseleave', function() {
+						card.style.backgroundColor = '#0A528F'; 
+					});
+				});	
+			}	
+		else if (selectedTheme === 'blackberry') {
+				document.body.style.backgroundImage = 'url("black.webp")';
+				btnAdd.style.backgroundColor = '#C2CED6'; 
+				btnAdd.style.color = 'black';
+				btnAdd.style.border = 'none';
+				btnAdd.addEventListener('mouseenter', function() {
+					btnAdd.style.backgroundColor = '#9DA5AA'; 
+				});
+				btnAdd.addEventListener('mouseleave', function() {
+					btnAdd.style.backgroundColor = '#C2CED6'; 
+				});
+				document.querySelectorAll('.card').forEach(function(card) {
+					card.style.backgroundImage = 'url("blackcard.jpg")';
+					card.style.color = 'black';
+					card.addEventListener('mouseenter', function() {
+						card.style.boxShadow = '2px 0 15px 2px #9DA5AA';
+					});
+					card.addEventListener('mouseleave', function() {
+						card.style.boxShadow = 'none';
+					});
+				});	
+				document.querySelectorAll('.update-btn').forEach(function(card) {
+					card.style.backgroundColor = '#272424';
+					card.style.color = 'white';
+					card.addEventListener('mouseenter', function() {
+						card.style.backgroundColor = 'black'; 
+					});
+					card.addEventListener('mouseleave', function() {
+						card.style.backgroundColor = '#272424'; 
+					});
+				});	
+			}	
+			else if (selectedTheme === 'whitechocolate') {
+				document.body.style.backgroundImage = 'url("white.webp")';
+				heading.style.color = 'black';
+				intro.style.color = 'black';
+				btnAdd.style.backgroundColor = '#E4D288'; 
+				btnAdd.style.color = 'black';
+				btnAdd.style.border = 'none';
+				btnAdd.addEventListener('mouseenter', function() {
+					btnAdd.style.backgroundColor = '#C5B874'; 
+				});
+				btnAdd.addEventListener('mouseleave', function() {
+					btnAdd.style.backgroundColor = '#E4D288'; 
+				});
+				document.querySelectorAll('.card').forEach(function(card) {
+					card.style.backgroundImage = 'url("whitecard.jpg")';
+					card.style.color = 'black';
+					card.addEventListener('mouseenter', function() {
+						card.style.boxShadow = '2px 0 15px 2px #9DA5AA';
+					});
+					card.addEventListener('mouseleave', function() {
+						card.style.boxShadow = 'none';
+					});
+				});	
+				document.querySelectorAll('.update-btn').forEach(function(card) {
+					card.style.backgroundColor = 'white';
+					card.style.color = 'black';
+					card.addEventListener('mouseenter', function() {
+						card.style.backgroundColor = '#D6D4D4'; 
+					});
+					card.addEventListener('mouseleave', function() {
+						card.style.backgroundColor = 'white'; 
+					});
+				});	
+			}		
+
+			switch (theme) {
+				case 'coffee':
+					document.body.style.backgroundImage = 'url("brown1.jpg")';
+					heading.style.color = 'white';
+					intro.style.color = 'white';
+					btnAdd.style.backgroundColor = '';
+					btnAdd.style.color = '';
+					btnAdd.style.border = '';
+					btnAdd.addEventListener('mouseenter', function() {
+						btnAdd.style.backgroundColor = ''; 
+					});
+					btnAdd.addEventListener('mouseleave', function() {
+						btnAdd.style.backgroundColor = ''; 
+					});
+                    document.querySelectorAll('.card').forEach(function(card) {
+						card.style.backgroundImage = 'url("yellow.jpg")';
+						card.style.color = 'black';
+						card.addEventListener('mouseenter', function() {
+							card.style.boxShadow = '2px 0 15px 2px #CDB661';
+						});
+						card.addEventListener('mouseleave', function() {
+							card.style.boxShadow = 'none';
+						});
+					});
+					document.querySelectorAll('.update-btn').forEach(function(card) {
+                    	card.style.backgroundColor = '#4A281B';
+						card.style.color = 'white';
+						card.addEventListener('mouseenter', function() {
+							card.style.backgroundColor = '#351A10'; 
+						});
+						card.addEventListener('mouseleave', function() {
+							card.style.backgroundColor = '#4A281B'; 
+						});
+					});	
+					break;
+				case 'strawberry':
+					document.body.style.backgroundImage = 'url("strawberry.jpg")';
+					heading.style.color = 'black';
+					intro.style.color = 'black';
+					btnAdd.style.backgroundColor = '#920A0A'; 
+					btnAdd.style.color = 'white';
+					btnAdd.style.border = 'none';
+					btnAdd.addEventListener('mouseenter', function() {
+						btnAdd.style.backgroundColor = '#6F0707'; 
+					});
+					btnAdd.addEventListener('mouseleave', function() {
+						btnAdd.style.backgroundColor = '#920A0A'; 
+					});
+					document.querySelectorAll('.card').forEach(function(card) {
+                    	card.style.backgroundImage = 'url("strawberrycard.jpg")';
+						card.style.color = 'white';
+						card.addEventListener('mouseenter', function() {
+							card.style.boxShadow = '2px 0 15px 2px #900717';
+						});
+						card.addEventListener('mouseleave', function() {
+							card.style.boxShadow = 'none';
+						});
+					});	
+					document.querySelectorAll('.update-btn').forEach(function(card) {
+                    	card.style.backgroundColor = '#FAA1D1';
+						card.style.color = 'black';
+						card.addEventListener('mouseenter', function() {
+							card.style.backgroundColor = '#F582C4'; 
+						});
+						card.addEventListener('mouseleave', function() {
+							card.style.backgroundColor = '#FAA1D1'; 
+						});
+					});	
+					break;
+				case 'mango':
+					document.body.style.backgroundImage = 'url("mango.jpg")';
+					heading.style.color = 'black';
+					intro.style.color = 'black';
+					btnAdd.style.backgroundColor = '#C25E04'; 
+					btnAdd.style.color = 'white';
+					btnAdd.style.border = 'none';
+					btnAdd.addEventListener('mouseenter', function() {
+						btnAdd.style.backgroundColor = '#AE6704'; 
+					});
+					btnAdd.addEventListener('mouseleave', function() {
+						btnAdd.style.backgroundColor = '#C25E04'; 
+					});
+					document.querySelectorAll('.card').forEach(function(card) {
+						card.style.backgroundImage = 'url("mangocard.jpg")';
+						card.style.color = 'white';
+						card.addEventListener('mouseenter', function() {
+							card.style.boxShadow = '2px 0 15px 2px #6E4412';
+						});
+						card.addEventListener('mouseleave', function() {
+							card.style.boxShadow = 'none';
+						});
+					});	
+					document.querySelectorAll('.update-btn').forEach(function(card) {
+                    	card.style.backgroundColor = '#FFDB49';
+						card.style.color = 'black';
+						card.addEventListener('mouseenter', function() {
+							card.style.backgroundColor = '#D4B11E'; 
+						});
+						card.addEventListener('mouseleave', function() {
+							card.style.backgroundColor = '#FFDB49'; 
+						});
+					});	
+					break;
+				case 'plum':
+					document.body.style.backgroundImage = 'url("plum.jpg")';
+					heading.style.color = 'white';
+					intro.style.color = 'white';
+					btnAdd.style.backgroundColor = '#F6AEF6'; 
+					btnAdd.style.color = 'black';
+					btnAdd.style.border = 'none';
+					btnAdd.addEventListener('mouseenter', function() {
+						btnAdd.style.backgroundColor = '#D572D5'; 
+					});
+					btnAdd.addEventListener('mouseleave', function() {
+						btnAdd.style.backgroundColor = '#F6AEF6'; 
+					});
+					document.querySelectorAll('.card').forEach(function(card) {
+						card.style.backgroundImage = 'url("plumcard.jpg")';
+						card.style.color = 'black';
+						card.addEventListener('mouseenter', function() {
+							card.style.boxShadow = '2px 0 15px 2px #B477C0';
+						});
+						card.addEventListener('mouseleave', function() {
+							card.style.boxShadow = 'none';
+						});
+					});	
+					document.querySelectorAll('.update-btn').forEach(function(card) {
+                    	card.style.backgroundColor = '#5C0066';
+						card.style.color = 'white';
+						card.addEventListener('mouseenter', function() {
+							card.style.backgroundColor = '#39073C'; 
+						});
+						card.addEventListener('mouseleave', function() {
+							card.style.backgroundColor = '#5C0066'; 
+						});
+					});	
+					break;
+				case 'guava':
+					document.body.style.backgroundImage = 'url("guava.jpg")';
+					heading.style.color = '';
+					intro.style.color = '';
+					btnAdd.style.backgroundColor = '#F299BD'; 
+					btnAdd.style.color = 'black';
+					btnAdd.style.border = 'none';
+					btnAdd.addEventListener('mouseenter', function() {
+						btnAdd.style.backgroundColor = '#BB6D90'; 
+					});
+					btnAdd.addEventListener('mouseleave', function() {
+						btnAdd.style.backgroundColor = '#F299BD'; 
+					});
+					document.querySelectorAll('.card').forEach(function(card) {
+						card.style.backgroundImage = 'url("guavacard.jpg")';
+						card.style.color = 'black';
+						card.addEventListener('mouseenter', function() {
+							card.style.boxShadow = '2px 0 15px 2px pink';
+						});
+						card.addEventListener('mouseleave', function() {
+							card.style.boxShadow = 'none';
+						});
+					});	
+					document.querySelectorAll('.update-btn').forEach(function(card) {
+                    	card.style.backgroundColor = '#1D5300';
+						card.style.color = 'white';
+						card.addEventListener('mouseenter', function() {
+							card.style.backgroundColor = '#163805'; 
+						});
+						card.addEventListener('mouseleave', function() {
+							card.style.backgroundColor = '#1D5300'; 
+						});
+					});	
+					break;
+			}
+    }
+	var allCards = JSON.parse(localStorage.getItem('allCards')) || [];
+	displayCards(allCards);
+
+	function displayCards(cards) {
+		var cardID = document.getElementById('cardID');
+		cardID.innerHTML = ''; // Clear existing cards
+		cards.forEach(function(card, index) {
+			var cardhtml = createCardHTML(card, index, selectTheme);
+			cardID.insertAdjacentHTML('beforeend', cardhtml);
+		});
+		applyTheme(selectTheme);
+	}
+
+function getSelectedTheme() {
+	const choseTheme = document.getElementById('th');
+	return choseTheme.value;
+}
+
+document.querySelector('.btn.btn-warning.m-2').addEventListener('click', function() {
+    const selectedTheme = getSelectedTheme();
+    window.location.href = `add.html?theme=${encodeURIComponent(selectedTheme)}`;
+});
+
+	window.deleteCard = function(index) {
+		var allCards = JSON.parse(localStorage.getItem('allCards')) || [];
+		if (confirm('Are you sure you want to delete this card?')) {
+			allCards.splice(index, 1); // Remove the card at the specified index
+			localStorage.setItem('allCards', JSON.stringify(allCards)); // Update localStorage
+			displayCards(allCards); // Refresh the displayed cards
+		}
+	}
+
+	window.updateCard = function(index) {
+		var allCards = JSON.parse(localStorage.getItem('allCards')) || [];
+		var data = allCards[index];
+		const selectedTheme = getSelectedTheme();
+		// Redirect to index.html to update the card with the specified index
+		window.location.href = `add.html?fn=${encodeURIComponent(data.fn)}&ln=${encodeURIComponent(data.ln)}&cardtype=
+		${encodeURIComponent(data.cardtype)}&bn=${encodeURIComponent(data.bn)}&d=${encodeURIComponent(data.d)}&ename=
+		${encodeURIComponent(data.ename)}&pname=
+		${encodeURIComponent(data.pname)}&sdate=${encodeURIComponent(data.sdate)}&edate=${encodeURIComponent(data.edate)}
+		&stime=${encodeURIComponent(data.stime)}&pic=${encodeURIComponent(data.pic)}&index=${index}&theme=${encodeURIComponent(selectedTheme)}`;
+	}
+
+	document.getElementById('search').addEventListener('input', function() {
+		var searchItem = this.value.toLowerCase();
+		var filteredCards = allCards.filter(function(card) {
+		return (
+			card.fn.toLowerCase().includes(searchItem) ||
+			card.ln.toLowerCase().includes(searchItem) ||
+			card.cardtype.toLowerCase().includes(searchItem) ||
+			card.bn.toLowerCase().includes(searchItem) ||
+			card.d.toLowerCase().includes(searchItem) ||
+			card.ename.toLowerCase().includes(searchItem) ||
+			card.pname.toLowerCase().includes(searchItem) ||
+			card.sdate.toLowerCase().includes(searchItem) ||
+			card.edate.toLowerCase().includes(searchItem) ||
+			card.stime.toLowerCase().includes(searchItem)
+		);
+    });
+    displayCards(filteredCards); 
+  });
+
+	window.deleteAll = function() {
+		if (confirm('Are you sure you want to delete all cards?')) {
+			localStorage.removeItem('allCards');
+			displayCards([]);
+		}
+	}
+
+});
+
+	</script>
+	</head>	
+</html>

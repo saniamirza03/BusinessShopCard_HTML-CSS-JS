@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Add a Card</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<style>
+		body {
+			background-image: url(brown1.jpg);
+			background-repeat: no-repeat;
+			background-size: cover;
+		}	
+		.h1 {
+			font-family: rubik;
+			text-decoration: underline;
+		}	
+		form input[type = "file"] {
+			display: none;
+		}
+		#h {
+			color: white;
+		}
+		form {
+			background-image: url(yellow.jpg);
+			background-repeat: no-repeat;
+			background-size: cover;
+		}
+		label, p {
+			font-family: rubik;
+			font-weight: bold;
+			color: #4A281B;
+		}
+		.b {
+			font-weight: normal;
+			font-size: 15px;
+		}
+		.photo {
+			background-color: #4A281B;
+			cursor: pointer;
+			border-radius: 7px;
+			padding: 3px 10px;
+			color: white;
+		}
+		.photo:hover {
+			border: 2px solid black;
+		}
+		button {
+			background-color: #4A281B;
+			border-radius: 7px;
+			border: 2px solid #4A281B;
+			padding: 5px 25px;
+			color: white;
+  			cursor: pointer;
+			transition: 0.3s;
+		}
+		button:hover {
+			background-color: transparent;
+			color: black;
+			box-shadow: 2px 0 15px 5px #4A281B;
+		}
+		#edate {
+			margin-left: 10px;
+		}
+		@media only screen and (max-width: 381px) {
+			#edate {
+				margin-left: 0;
+			}
+		}
+		@media only screen and (max-width: 350px) {
+			form {
+				text-align: center;
+			}
+			#st {
+				margin-left: -27px;
+			}
+		}
+		
+	</style>
+	<body>
+		<div class = "container mt-3">
+		<h1 class = "h1 text-center" id = "h">Add a card</h1>
+		<form id = "cardform" class = "rounded-4 p-4" method = "post">
+			<label for = "firstname" id = "f">First Name</label>
+			<input type = "text" name="firstName" class = "form-control" id = "fn" placeholder = "Enter first name" required><br>
+			
+			<label for = "lastname" id = "l">Last Name</label>
+			<input type = "text" name="lastName" class = "form-control" id = "ln" placeholder = "Enter last name" required><br>
+			
+			<p>Choose your card type</p>
+			<input type = "radio" name = "cardtype" id = "business" value="business" required>
+			<label for = "business" id = "b">Business Card</label><br>
+			<input type = "radio" name = "cardtype" id = "shop" value="shop" required>
+			<label for = "shop" id = "s">Shop Card</label><br><br>
+			
+			<label for = "nameofb" id = "nb">Name of your business/shop</label>
+			<input type = "text" name="businessName" class = "form-control" id = "bn" placeholder = "Enter business/shop name" required><br>
+			
+			<label for = "desc">Description</label>
+			<textarea name="description" class = "form-control" id = "d" required></textarea><br>
+			
+			<label for = "startdate" id = "sd">Enter starting date</label>
+			<input type = "date" name="startDate" id = "sdate" required><br><br>
+			<label for = "enddate" id = "ed">Enter ending date</label>
+			<input type = "date" name="endDate" id = "edate"><br><br>
+			
+			<label for = "event" id = "e">Name of Event</label>
+			<input type = "text" name="eventName" class = "form-control" id = "ename" placeholder = "Enter event name" required><br>
+
+			<label for = "place" id = "p">Nearest Place</label>
+			<input type = "text" name="placeName" class = "form-control" id = "pname" placeholder = "Enter your nearest place" required><br>
+			
+			<label for = "starttime" id = "st">Starting time of event</label>
+			<input type = "time" name="startTime" id = "stime" required><br><br>
+			
+			<p>Profile photo(optional)</p>
+			<label id = "picID" for = "pic" class = "photo">Upload photo</label><br>
+			<input type = "file" id = "pic" accept = "image/*">
+			<label for = "fname" id="filename"></label>&nbsp<i class="fa fa-times" id = "crossmark" style="display:none; cursor:pointer;"></i>
+			<input type = "hidden" id = "index" name = "index">
+				<div class = "text-center">
+					<button type = "submit" id = "sbtn">Submit</button>
+					<button type = "button" id = "cbtn" onclick="clearform()" style="margin-left: 15px;">Clear</button>
+				</div>
+		</div>	
+		</form>
+	</body>
+
+	<script>	
+
+function applyTheme(theme) {
+	const formColor = document.getElementById('cardform');
+	const labels = document.querySelectorAll('label');
+	const para = document.querySelectorAll('p');
+	const picID = document.getElementById('picID');
+	const photoBg = document.querySelector('.photo');
+	const heading = document.getElementById('h');
+	const buttons = document.querySelectorAll('button');
+	const selectedTheme = sessionStorage.getItem('selectedTheme');
+	const crossIcon = document.getElementById('crossmark');
+
+	if (selectedTheme === 'blueberry') {
+		document.body.style.backgroundImage = 'url("blueberry.jpg")';
+		formColor.style.backgroundImage = 'url(blueberrycard.png)';
+		heading.style.color = 'white';
+		labels.forEach(label => {
+			label.style.color = '#0A528F';
+		});
+		para.forEach(p => {
+			p.style.color = '#0A528F'; 
+		});
+		picID.style.color = 'white';
+		photoBg.style.backgroundColor = '#0A528F';
+		photoBg.addEventListener('mouseenter', function() {
+			photoBg.style.border = '2px solid #073760'; 
+		});
+		photoBg.addEventListener('mouseleave', function() {
+			photoBg.style.border = 'none'; 
+		});
+		crossIcon.style.color = 'black';
+		buttons.forEach(button => {
+			button.style.backgroundColor = '#0A528F';
+			button.style.border = '2px solid #0A528F';
+			button.style.color = 'white'; 
+
+			button.addEventListener('mouseenter', function() {
+				button.style.backgroundColor = 'transparent'; 
+				button.style.color = 'black'; 
+				button.style.boxShadow = '2px 0 15px 5px #0A528F';
+			});
+			button.addEventListener('mouseleave', function() {
+				button.style.backgroundColor = '#0A528F'; 
+				button.style.color = 'white'; 
+				button.style.boxShadow = 'none';
+			});
+		});
+	}	
+else if (selectedTheme === 'blackberry') {
+	document.body.style.backgroundImage = 'url("black.webp")';
+		formColor.style.backgroundImage = 'url(blackcard.jpg)';
+		heading.style.color = 'white';
+		labels.forEach(label => {
+			label.style.color = 'black';
+		});
+		para.forEach(p => {
+			p.style.color = 'black'; 
+		});
+		picID.style.color = 'white';
+		photoBg.style.backgroundColor = 'black';
+		photoBg.addEventListener('mouseenter', function() {
+			photoBg.style.border = '2px solid black'; 
+		});
+		photoBg.addEventListener('mouseleave', function() {
+			photoBg.style.border = 'none'; 
+		});
+		crossIcon.style.color = 'white';
+		buttons.forEach(button => {
+			button.style.backgroundColor = 'black';
+			button.style.border = '2px solid black';
+			button.style.color = 'white'; 
+
+			button.addEventListener('mouseenter', function() {
+				button.style.backgroundColor = 'transparent'; 
+				button.style.color = 'black'; 
+				button.style.boxShadow = '2px 0 15px 5px black';
+			});
+			button.addEventListener('mouseleave', function() {
+				button.style.backgroundColor = 'black'; 
+				button.style.color = 'white'; 
+				button.style.boxShadow = 'none';
+			});
+		});
+	}	
+	else if (selectedTheme === 'whitechocolate') {
+		document.body.style.backgroundImage = 'url("white.webp")';
+		formColor.style.backgroundImage = 'url(whitecard.png)';
+		heading.style.color = 'black';
+		labels.forEach(label => {
+			label.style.color = 'black';
+		});
+		para.forEach(p => {
+			p.style.color = 'black'; 
+		});
+		picID.style.color = 'black';
+		photoBg.style.backgroundColor = 'white';
+		photoBg.addEventListener('mouseenter', function() {
+			photoBg.style.border = '2px solid #D6D4D4'; 
+		});
+		photoBg.addEventListener('mouseleave', function() {
+			photoBg.style.border = 'none'; 
+		});
+		crossIcon.style.color = 'black';
+		buttons.forEach(button => {
+			button.style.backgroundColor = 'white';
+			button.style.border = '2px solid white';
+			button.style.color = 'black'; 
+
+			button.addEventListener('mouseenter', function() {
+				button.style.backgroundColor = 'transparent'; 
+				button.style.color = 'black'; 
+				button.style.boxShadow = '2px 0 15px 5px white';
+			});
+			button.addEventListener('mouseleave', function() {
+				button.style.backgroundColor = 'white'; 
+				button.style.color = 'black'; 
+				button.style.boxShadow = 'none';
+			});
+		});
+	}		
+
+	switch (theme) {
+		case 'coffee':
+			document.body.style.backgroundImage = 'url("brown1.jpg")';
+			formColor.style.backgroundImage = 'url(yellow.jpg)';
+			heading.style.color = 'white';
+			labels.forEach(label => {
+                label.style.color = '#4A281B';
+            });
+			para.forEach(p => {
+                p.style.color = '#4A281B'; 
+            });
+			picID.style.color = 'white';
+			photoBg.style.backgroundColor = '#4A281B';
+			photoBg.addEventListener('mouseenter', function() {
+				photoBg.style.border = '2px solid #26120E'; 
+			});
+			photoBg.addEventListener('mouseleave', function() {
+				photoBg.style.border = 'none'; 
+			});
+			crossIcon.style.color = 'black';
+			buttons.forEach(button => {
+				button.style.backgroundColor = '#4A281B';
+				button.style.border = '2px solid #4A281B';
+				button.style.color = 'white'; 
+
+				button.addEventListener('mouseenter', function() {
+					button.style.backgroundColor = 'transparent'; 
+					button.style.color = 'black'; 
+					button.style.boxShadow = '2px 0 15px 5px #4A281B';
+				});
+				button.addEventListener('mouseleave', function() {
+					button.style.backgroundColor = '#4A281B'; 
+					button.style.color = 'white'; 
+					button.style.boxShadow = 'none';
+				});
+            });
+			break;
+
+		case 'strawberry':
+			document.body.style.backgroundImage = 'url("strawberry.jpg")';
+			formColor.style.backgroundImage = 'url(strawberrycard.jpg)';
+			heading.style.color = 'black';
+			labels.forEach(label => {
+                label.style.color = '#FAA1D1';
+            });
+			para.forEach(p => {
+                p.style.color = '#FAA1D1'; 
+            });
+			picID.style.color = 'black';
+			photoBg.style.backgroundColor = '#FAA1D1';
+			photoBg.addEventListener('mouseenter', function() {
+				photoBg.style.border = '2px solid #D60B7D'; 
+			});
+			photoBg.addEventListener('mouseleave', function() {
+				photoBg.style.border = 'none'; 
+			});
+			crossIcon.style.color = 'white';
+			buttons.forEach(button => {
+				button.style.backgroundColor = '#FAA1D1';
+				button.style.border = '2px solid #FAA1D1';
+				button.style.color = 'black'; 
+
+				button.addEventListener('mouseenter', function() {
+					button.style.backgroundColor = 'transparent'; 
+					button.style.color = 'white'; 
+					button.style.boxShadow = '2px 0 15px 5px #FAA1D1';
+				});
+				button.addEventListener('mouseleave', function() {
+					button.style.backgroundColor = '#FAA1D1'; 
+					button.style.color = 'black'; 
+					button.style.boxShadow = 'none';
+				});
+            });
+			break;
+
+		case 'mango':
+			document.body.style.backgroundImage = 'url("mango.jpg")';
+			formColor.style.backgroundImage = 'url(mangocard.jpg)';
+			heading.style.color = 'black';
+			labels.forEach(label => {
+                label.style.color = '#FFDB49';
+            });
+			para.forEach(p => {
+                p.style.color = '#FFDB49'; 
+            });
+			picID.style.color = 'black';
+			photoBg.style.backgroundColor = '#FFDB49';
+			photoBg.addEventListener('mouseenter', function() {
+				photoBg.style.border = '2px solid #8C7000'; 
+			});
+			photoBg.addEventListener('mouseleave', function() {
+				photoBg.style.border = 'none'; 
+			});
+			crossIcon.style.color = 'white';
+			buttons.forEach(button => {
+				button.style.backgroundColor = '#FFDB49';
+				button.style.border = '2px solid #FFDB49';
+				button.style.color = 'black'; 
+
+				button.addEventListener('mouseenter', function() {
+					button.style.backgroundColor = 'transparent'; 
+					button.style.color = 'white'; 
+					button.style.boxShadow = '2px 0 15px 5px #FFDB49';
+				});
+				button.addEventListener('mouseleave', function() {
+					button.style.backgroundColor = '#FFDB49'; 
+					button.style.color = 'black'; 
+					button.style.boxShadow = 'none';
+				});
+            });
+			break;
+
+		case 'plum':
+			document.body.style.backgroundImage = 'url("plum.jpg")';
+			formColor.style.backgroundImage = 'url(plumcard.jpg)';
+			labels.forEach(label => {
+                label.style.color = '#5C0066';
+            });
+			para.forEach(p => {
+                p.style.color = '#5C0066'; 
+            });
+			picID.style.color = 'white';
+			photoBg.style.backgroundColor = '#5C0066';
+			photoBg.addEventListener('mouseenter', function() {
+				photoBg.style.border = '2px solid #3E0A42'; 
+			});
+			photoBg.addEventListener('mouseleave', function() {
+				photoBg.style.border = 'none'; 
+			});
+			crossIcon.style.color = 'black';
+			buttons.forEach(button => {
+				button.style.backgroundColor = '#5C0066';
+				button.style.border = '2px solid #5C0066';
+				button.style.color = 'white'; 
+
+				button.addEventListener('mouseenter', function() {
+					button.style.backgroundColor = 'transparent'; 
+					button.style.color = 'black'; 
+					button.style.boxShadow = '2px 0 15px 5px #5C0066';
+				});
+				button.addEventListener('mouseleave', function() {
+					button.style.backgroundColor = '#5C0066'; 
+					button.style.color = 'white'; 
+					button.style.boxShadow = 'none';
+				});
+            });
+			break;
+
+		case 'guava':
+			document.body.style.backgroundImage = 'url("guava.jpg")';
+			formColor.style.backgroundImage = 'url(guavacard.jpg)';
+			labels.forEach(label => {
+                label.style.color = '#1D5300';
+            });
+			para.forEach(p => {
+                p.style.color = '#1D5300'; 
+            });
+			picID.style.color = 'white';
+			photoBg.style.backgroundColor = '#1D5300';
+			photoBg.addEventListener('mouseenter', function() {
+				photoBg.style.border = '2px solid #1C340B'; 
+			});
+			photoBg.addEventListener('mouseleave', function() {
+				photoBg.style.border = 'none'; 
+			});
+			crossIcon.style.color = 'black';
+			buttons.forEach(button => {
+				button.style.backgroundColor = '#1D5300';
+				button.style.border = '2px solid #1D5300';
+				button.style.color = 'white'; 
+
+				button.addEventListener('mouseenter', function() {
+					button.style.backgroundColor = 'transparent'; 
+					button.style.color = 'black'; 
+					button.style.boxShadow = '2px 0 15px 5px #1D5300';
+				});
+				button.addEventListener('mouseleave', function() {
+					button.style.backgroundColor = '#1D5300'; 
+					button.style.color = 'white'; 
+					button.style.boxShadow = 'none';
+				});
+            });
+			break;
+	}	
+}
+document.addEventListener('DOMContentLoaded', function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const themeFromURL = urlParams.get('theme');
+
+    if (themeFromURL) {
+        applyTheme(themeFromURL);
+    } else {
+        applyTheme('coffee');
+    }
+});
+	
+	const fileupload = document.getElementById('pic');
+	const filenameDisplay = document.getElementById('filename');
+	const iconDisplay = document.getElementById('crossmark');
+	
+	function clearform() {
+		document.getElementById('cardform').reset();
+	}
+
+	fileupload.addEventListener('change', (event) => {
+		const files = event.target.files;
+		if (files.length > 0) {
+			const filename = files[0].name;
+			filenameDisplay.textContent = filename;
+			crossmark.style.display = 'inline';
+		} else {
+			filenameDisplay.textContent = '';
+		}
+	});
+	
+	iconDisplay.addEventListener('click', function() {
+		filenameDisplay.textContent = ''; 
+		iconDisplay.style.display = 'none'; 
+		fileupload.value = ''; 
+		localStorage.removeItem('pic');
+	});
+	document.addEventListener('DOMContentLoaded', function() {
+		var card_info = new URLSearchParams(window.location.search);
+
+		document.getElementById('fn').value = card_info.get('fn') || '';
+		document.getElementById('ln').value = card_info.get('ln') || '';
+		var cardtype = card_info.get('cardtype');
+		if (cardtype === 'business') {
+			document.getElementById('business').checked = true;
+		}
+		else if(cardtype === 'shop') {
+			document.getElementById('shop').checked = true;
+		}
+		document.getElementById('bn').value = card_info.get('bn') || '';
+		document.getElementById('d').value = card_info.get('d') || '';
+		document.getElementById('sdate').value = card_info.get('sdate') || '';
+		document.getElementById('edate').value = card_info.get('edate') || '';
+		document.getElementById('ename').value = card_info.get('ename') || '';
+		document.getElementById('pname').value = card_info.get('pname') || '';
+		document.getElementById('stime').value = card_info.get('stime') || '';
+
+		var index = card_info.get('index');
+        document.getElementById('index').value = index;
+	});
+
+	document.getElementById("cardform").addEventListener("submit", function(event) {
+    event.preventDefault(); // Prevent form submission
+
+    // Get form values
+    var fn = document.getElementById("fn").value;
+    var ln = document.getElementById("ln").value;
+    var cardtype = document.querySelector('input[name="cardtype"]:checked').value;
+	var bn = document.getElementById("bn").value;
+	var d = document.getElementById("d").value;
+	var sdate = document.getElementById("sdate").value;
+	var edate = document.getElementById("edate").value;
+	var ename = document.getElementById("ename").value;
+	var pname = document.getElementById("pname").value;
+	var stime = document.getElementById("stime").value;
+    var pic = document.getElementById("pic").files[0];
+    var index = document.getElementById('index').value; // Get the index from the hidden input field
+
+    // Read the photo file using FileReader
+    var reader = new FileReader();
+    reader.onload = function() {
+      var profpic = reader.result; // Get the data URL of the photo
+      // Store card data and photo URL in localStorage
+      var newCard = { fn: fn, ln: ln, cardtype: cardtype, bn: bn, d: d, sdate: sdate, edate: edate, ename: ename, pname: pname, stime: stime, pic: profpic };
+      var allCards = JSON.parse(localStorage.getItem('allCards')) || [];
+      
+      if (index !== '') {
+        // If an index is provided, update the existing card
+        allCards[index] = newCard;
+      } else {
+        // Otherwise, add a new card
+        allCards.push(newCard);
+      }
+
+      localStorage.setItem('allCards', JSON.stringify(allCards));
+      window.location.href = 'home.html';
+    };
+
+    // Read the photo file as data URL
+    if (pic) {
+      reader.readAsDataURL(pic);
+    } else {
+      // Store card data without photo URL in localStorage
+      var newCard = { fn: fn, ln: ln, cardtype: cardtype, bn: bn, d: d, sdate: sdate, edate: edate, ename: ename, pname: pname, stime: stime };
+      var allCards = JSON.parse(localStorage.getItem('allCards')) || [];
+
+      if (index !== '') {
+        allCards[index] = newCard;
+      } else {
+        allCards.push(newCard);
+      }
+
+      localStorage.setItem('allCards', JSON.stringify(allCards));
+      window.location.href = 'home.html';
+    }
+  });
+
+	</script>
+</head>
+</html>
